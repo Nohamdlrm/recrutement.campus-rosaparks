@@ -14,18 +14,18 @@
     <div class="logo-text">ROSA PARKS RECRUTEMENT</div>
     <div id="login-container">
         <div id="g_id_onload" 
-             data-client_id="AIzaSyCPq5eZUIQZpKZ0mskszEqswYkk1xSHzME" 
+             data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" 
              data-callback="checkAdmin">
         </div>
         <div class="g_id_signin" data-type="icon" data-shape="circle"></div>
     </div>
-    <div id="admin-logged" class="admin-badge" style="display:none">Mode Administrateur ✅</div>
+    <div id="admin-logged" class="admin-badge" style="display:none">Admin Connecté ✅</div>
 </nav>
 
 <div class="container">
     <div id="role-selection">
         <div class="header-title">
-            <h1>Portail de Recrutement</h1>
+            <h1>Rejoignez l'Équipe</h1>
             <span class="instruction">💡 Cliquez sur une carte pour ouvrir le formulaire</span>
         </div>
         <div class="selection-grid">
@@ -44,36 +44,36 @@
 
     <div id="form-view" class="form-container">
         <span class="close-form" onclick="goBack()">✕ ANNULER</span>
-        <h2 id="form-title">Dossier</h2>
+        <h2 id="form-title" style="color: var(--accent);">Dossier de Candidature</h2>
         <form id="applyForm">
             <input type="hidden" id="role-val">
             <div class="input-row">
                 <input type="text" id="nom" placeholder="Prénom & Nom RP" required>
                 <input type="text" id="discord" placeholder="Pseudo Discord" required>
             </div>
-            <input type="text" id="matiere" placeholder="Matière souhaitée ou Pôle de surveillance" required>
-            <textarea id="motiv" rows="6" placeholder="Quelles sont vos motivations ?" required></textarea>
+            <input type="text" id="matiere" placeholder="Matière ou Pôle de surveillance" required>
+            <textarea id="motiv" rows="5" placeholder="Quelles sont vos motivations ?" required></textarea>
             
             <div class="rules-box">
                 <div class="check-item">
                     <input type="checkbox" required>
-                    <label>Je m'engage à être actif et à ne pas harceler le staff pour une réponse.</label>
+                    <label>Je m'engage à être actif et à ne pas spam pour une réponse.</label>
                 </div>
                 <div class="check-item">
                     <input type="checkbox" required>
                     <label id="eng-text"></label>
                 </div>
             </div>
-            <button type="submit" class="btn-submit">VALIDER LE DOSSIER</button>
+            <button type="submit" class="btn-submit">ENVOYER LE DOSSIER</button>
         </form>
     </div>
 
     <div id="admin-view" class="admin-section">
         <div class="admin-header">
-            <h2>Dossiers Reçus</h2>
-            <button class="btn-refresh" onclick="fetchCandidates()">Actualiser la liste</button>
+            <h2>Dossiers Reçus (Base de Données)</h2>
+            <button class="btn-refresh" onclick="fetchCandidates()">Actualiser ↻</button>
         </div>
-        <div id="candidates-list">Chargement des dossiers en temps réel...</div>
+        <div id="candidates-list">Chargement des dossiers...</div>
     </div>
 </div>
 
@@ -81,9 +81,9 @@
     <div class="popup-box">
         <div class="check-icon">✓</div>
         <h2>DOSSIER TRANSMIS</h2>
-        <p>Votre candidature a été enregistrée avec succès.</p>
+        <p>Votre candidature est enregistrée dans le Cloud.</p>
         <div class="timer-box">RÉPONSE SOUS 24H</div>
-        <button class="btn-submit" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
+        <button class="btn-submit" onclick="location.reload()">RETOUR</button>
     </div>
 </div>
 
