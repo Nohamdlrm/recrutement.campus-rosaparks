@@ -1,8 +1,7 @@
-// URL FIREBASE (Vérifie bien que le .json est à la fin)
-const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
+const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures";
 const ADMIN_MAIL = "ce.0227235a@campus-rosaparks.fr";
 
-// 1. ANIMATIONS AU SCROLL
+// 1. ANIMATIONS
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
 }, { threshold: 0.1 });
@@ -28,13 +27,12 @@ function cancel() {
     document.getElementById('home-view').style.display = 'block';
 }
 
-// 3. ENVOI DU FORMULAIRE
+// 3. ENVOI FIREBASE
 document.getElementById('main-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const btn = document.getElementById('btn-submit');
     btn.disabled = true;
-    btn.innerText = "TRANSMISSION EN COURS...";
+    btn.innerText = "ENVOI...";
 
     const data = {
         nom: document.getElementById('input-name').value,
@@ -42,61 +40,70 @@ document.getElementById('main-form').addEventListener('submit', async (e) => {
         matiere: document.getElementById('input-sub').value,
         motivations: document.getElementById('input-motivs').value,
         role: document.getElementById('input-role').value,
-        status: "attente",
+        status: "en_attente",
         date: new Date().toLocaleString('fr-FR')
     };
 
-    try {
-        const response = await fetch(DB_URL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (response.ok) {
-            alert("✅ Votre dossier a été transmis avec succès à la direction !");
-            location.reload();
-        } else {
-            throw new Error('Erreur');
-        }
-    } catch (err) {
-        alert("❌ Erreur : Impossible de contacter la base de données. Vérifiez votre connexion.");
-        btn.disabled = false;
-        btn.innerText = "RÉESSAYER";
-    }
+    await fetch(`${DB_URL}.json`, { method: 'POST', body: JSON.stringify(data) });
+    alert("Candidature envoyée !");
+    location.reload();
 });
 
-// 4. ADMIN LOGIN
+// 4. ADMIN
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
         document.getElementById('home-view').style.display = 'none';
         document.getElementById('admin-view').style.display = 'block';
         document.getElementById('admin-indicator').style.display = 'block';
-        document.getElementById('login-zone').style.display = 'none';
-        loadAdmin();
-    } else {
-        alert("Accès refusé : Ce compte n'est pas autorisé.");
+        loadData();
     }
 }
 
-async function loadAdmin() {
-    const r = await fetch(DB_URL);
-    const d = await r.json();
-    const list = document.getElementById('admin-list');
-    list.innerHTML = "";
-    if(!d) { list.innerHTML = "<p>Aucun dossier pour le moment.</p>"; return; }
+async function loadData() {
+    const res = await fetch(`${DB_URL}.json`);
+    const data = await res.json();
+    const pendingList = document.getElementById('pending-list');
+    const admissionCenter = document.getElementById('admission-center');
     
-    Object.entries(d).reverse().forEach(([id, c]) => {
-        list.innerHTML += `
-            <div class="admin-card" style="background:#1e293b; padding:25px; border-radius:20px; margin-bottom:15px; border-left:5px solid #0ea5e9; text-align:left;">
-                <div style="display:flex; justify-content:space-between;">
-                    <span style="color:#0ea5e9; font-weight:700;">${c.role.toUpperCase()}</span>
-                    <small style="opacity:0.5">${c.date}</small>
+    pendingList.innerHTML = "";
+    admissionCenter.innerHTML = "";
+
+    if(!data) return;
+
+    Object.entries(data).reverse().forEach(([id, c]) => {
+        const cardHtml = `
+            <div class="admin-card">
+                <div class="card-header">
+                    <span class="role-badge">${c.role}</span>
+                    <span class="date-txt">${c.date}</span>
                 </div>
-                <h3 style="margin:10px 0;">${c.nom}</h3>
-                <p><b>Discord:</b> ${c.discord} | <b>Pôle:</b> ${c.matiere}</p>
-                <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:10px; margin-top:10px;">${c.motivations}</div>
-            </div>`;
+                <h3>${c.nom}</h3>
+                <p><b>Discord:</b> ${c.discord} | <b>Matière:</b> ${c.matiere}</p>
+                <div class="motiv-box">${c.motivations}</div>
+                <div class="action-zone" id="actions-${id}">
+                    ${c.status === 'en_attente' ? `
+                        <button class="btn-approve" onclick="updateStatus('${id}', 'Accepté')">ACCEPTER</button>
+                        <button class="btn-reject" onclick="updateStatus('${id}', 'Refusé')">REFUSER</button>
+                    ` : `
+                        <div class="final-status status-${c.status.toLowerCase()}">DOSSIER ${c.status.toUpperCase()}</div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        if(c.status === 'en_attente') {
+            pendingList.innerHTML += cardHtml;
+        } else {
+            admissionCenter.innerHTML += cardHtml;
+        }
     });
+}
+
+async function updateStatus(id, newStatus) {
+    await fetch(`${DB_URL}/${id}.json`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: newStatus })
+    });
+    loadData(); // Rafraîchit les listes
 }
