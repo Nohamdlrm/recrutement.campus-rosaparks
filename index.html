@@ -39,13 +39,11 @@
             <div class="card-modern" onclick="openForm('Professeur')">
                 <div class="icon-wrap"><i class="fas fa-graduation-cap"></i></div>
                 <h3>Professeur</h3>
-                <p>Enseignez et gérez vos classes avec rigueur.</p>
                 <div class="btn-fake">Postuler</div>
             </div>
             <div class="card-modern" onclick="openForm('AED')">
                 <div class="icon-wrap"><i class="fas fa-user-shield"></i></div>
                 <h3>AED</h3>
-                <p>Assurez la discipline et la vie scolaire.</p>
                 <div class="btn-fake">Postuler</div>
             </div>
         </div>
@@ -57,8 +55,6 @@
                 <i class="fas fa-chevron-left"></i> Retour à l'accueil
             </button>
             <h2>Candidature</h2>
-            <p class="form-sub">Veuillez remplir les informations ci-dessous.</p>
-            
             <form id="apply-form">
                 <input type="hidden" id="input-role">
                 <div class="input-row">
@@ -67,7 +63,7 @@
                 </div>
                 <input type="text" id="matiere" placeholder="Poste souhaité" required>
                 <textarea id="motivs" rows="5" placeholder="Vos motivations..." required></textarea>
-                <button type="submit" class="btn-main-action">Déposer le dossier</button>
+                <button type="submit" class="btn-main-action" id="btn-submit">Déposer le dossier</button>
             </form>
         </div>
     </section>
@@ -75,7 +71,8 @@
     <section id="admin-view" style="display:none">
         <h2 class="admin-title">Dossiers à traiter</h2>
         <div id="list-pending"></div>
-        <h2 class="admin-title" style="margin-top:50px">Archives</h2>
+        
+        <h2 class="admin-title" style="margin-top:60px">Archives des décisions</h2>
         <div id="list-admission"></div>
     </section>
 </main>
