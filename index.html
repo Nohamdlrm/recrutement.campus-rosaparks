@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Rosa Parks | Recrutement Officiel</title>
+    <title>Campus Rosa Parks | Recrutement</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -19,7 +19,7 @@
         <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
         <div class="g_id_signin" data-type="standard"></div>
     </div>
-    <div id="admin-indicator" style="display:none" class="admin-badge">DIRECTION CONNECTÉE ✅</div>
+    <div id="admin-indicator" style="display:none" class="admin-badge">DIRECTION GÉNÉRALE ✅</div>
 </nav>
 
 <main class="container">
@@ -28,9 +28,9 @@
             <span class="top-tag">L'ÉTABLISSEMENT</span>
             <h1>Qui sommes-nous ?</h1>
             <p class="description">
-                Le <strong>Campus Rosa Parks</strong> n'est pas qu'un simple serveur de jeu, c'est une institution virtuelle pionnière dans le domaine du <strong>Roleplay Éducatif</strong> sur Discord. Notre projet repose sur une ambition claire : offrir une immersion scolaire totale et réaliste. 
+                Le <strong>Campus Rosa Parks</strong> est une institution virtuelle pionnière dans le domaine du <strong>Roleplay Éducatif</strong> sur Discord. Notre projet repose sur une ambition claire : offrir une immersion scolaire totale et réaliste. 
                 <br><br>
-                Ici, chaque journée est rythmée par un <strong>Emploi Du Temps (EDT) rigoureux</strong>, des cours interactifs et une vie lycéenne bouillonnante. Notre structure est pilotée par une équipe de direction complète qui veille au réalisme de chaque scène, transformant chaque interaction en un moment d'apprentissage ou de camaraderie inoubliable.
+                Ici, chaque journée est rythmée par un <strong>Emploi Du Temps (EDT) rigoureux</strong>, des cours interactifs et une vie lycéenne bouillonnante. Notre structure est pilotée par une équipe de direction complète qui veille au réalisme de chaque scène.
             </p>
         </section>
 
@@ -38,14 +38,13 @@
             <span class="top-tag">RECRUTEMENT</span>
             <h1>Pourquoi nous rejoindre ?</h1>
             <p class="description">
-                Postuler au sein du Campus Rosa Parks, c'est choisir de mettre ses compétences au service d'une communauté exigeante et passionnée. Nous recherchons des profils capables d'allier <strong>sérieux, créativité et pédagogie</strong>. 
+                Postuler au sein du Campus Rosa Parks, c'est choisir de mettre ses compétences au service d'une communauté exigeante. Nous recherchons des profils capables d'allier <strong>sérieux, créativité et pédagogie</strong>. 
                 <br><br>
-                En rejoignant notre équipe, vous ne devenez pas seulement un membre du staff : vous devenez un pilier de l'expérience RP de centaines de joueurs. Vous bénéficierez d'un encadrement structuré, d'outils de gestion de pointe (système Pronote) et d'une progression de carrière au sein de notre hiérarchie administrative. Nous valorisons l'initiative, la présence et le respect des protocoles qui font la renommée de notre campus.
+                En rejoignant notre équipe, vous devenez un pilier de l'expérience RP de centaines de joueurs. Vous bénéficierez d'un encadrement structuré et d'outils de gestion de pointe.
             </p>
             <div class="mini-features">
                 <span><i class="fas fa-clock"></i> EDT Dynamique</span>
                 <span><i class="fas fa-shield-halved"></i> Staff Pro</span>
-                <span><i class="fas fa-rocket"></i> Évolution</span>
             </div>
         </section>
 
@@ -70,50 +69,36 @@
 
     <section id="form-view" style="display:none">
         <div class="form-card">
-            <button class="btn-back" onclick="cancel()">✕ Annuler et retourner à l'accueil</button>
+            <button class="btn-back" onclick="cancel()">✕ RETOUR</button>
             <h2 id="display-role">DOSSIER DE CANDIDATURE</h2>
-            
             <form id="main-form">
                 <input type="hidden" id="input-role">
                 <div class="input-row">
-                    <div class="input-group">
-                        <label>Identité RP</label>
-                        <input type="text" id="input-name" placeholder="Prénom Nom" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Discord</label>
-                        <input type="text" id="input-discord" placeholder="pseudo_discord" required>
-                    </div>
+                    <input type="text" id="input-name" placeholder="Nom RP" required>
+                    <input type="text" id="input-discord" placeholder="Discord" required>
                 </div>
-                <div class="input-group">
-                    <label>Matière ou Pôle visé</label>
-                    <input type="text" id="input-sub" placeholder="Ex: Histoire / Surveillance" required>
-                </div>
-                <div class="input-group">
-                    <label>Vos Motivations Professionnelles</label>
-                    <textarea id="input-motivs" rows="6" placeholder="Expliquez votre parcours et vos envies..." required></textarea>
-                </div>
-                <div class="engagement">
-                    <label class="custom-check">
-                        <input type="checkbox" required>
-                        <span class="box"></span> Je certifie être sérieux et actif.
-                    </label>
-                </div>
-                <button type="submit" class="btn-send" id="btn-submit">TRANSMETTRE LE DOSSIER</button>
+                <input type="text" id="input-sub" placeholder="Matière ou Pôle visé" required style="margin:20px 0; width:100%;">
+                <textarea id="input-motivs" rows="6" placeholder="Vos Motivations..." required></textarea>
+                <button type="submit" class="btn-send" id="btn-submit">ENVOYER AU BUREAU ADMINISTRATIF</button>
             </form>
         </div>
     </section>
 
     <section id="admin-view" style="display:none">
-        <h2 class="admin-title">Dossiers Entrants</h2>
-        <div id="admin-list"></div>
+        <h1 class="admin-main-title">Gestion de la Direction</h1>
+        
+        <h2 class="admin-sub-title">📥 Dossiers Entrants</h2>
+        <div id="pending-list" class="admin-grid"></div>
+
+        <h2 class="admin-sub-title" style="margin-top:4rem">🏢 Centre d'Admission (Décisions)</h2>
+        <div id="admission-center" class="admin-grid archive"></div>
     </section>
 </main>
 
 <footer>
     <div class="social-box">
-        <a href="https://www.tiktok.com/@campus_rosa_parks" target="_blank" class="s-link tt"><i class="fab fa-tiktok"></i> tiktok</a>
-        <a href="https://discord.gg/rosaparks" target="_blank" class="s-link dc"><i class="fab fa-discord"></i> discord</a>
+        <a href="https://www.tiktok.com/@campus_rosa_parks" target="_blank" class="s-link tt">tiktok</a>
+        <a href="https://discord.gg/rosaparks" target="_blank" class="s-link dc">discord</a>
     </div>
     <p class="copyright-mini">© 2026 campus rosa parks - réalisé pour le staff</p>
 </footer>
