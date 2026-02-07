@@ -1,19 +1,10 @@
-const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures";
+const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
 const ADMIN_MAIL = "ce.0227235a@campus-rosaparks.fr";
 
-// Intersection Observer pour les animations
-const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-});
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-// Navigation
 function openForm(role) {
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
     document.getElementById('input-role').value = role;
-    document.getElementById('display-role').innerText = "CANDIDATURE : " + role.toUpperCase();
-    window.scrollTo(0,0);
 }
 
 function cancel() {
@@ -21,11 +12,10 @@ function cancel() {
     document.getElementById('home-view').style.display = 'block';
 }
 
-// Envoi Formulaire
 document.getElementById('apply-form').onsubmit = async (e) => {
     e.preventDefault();
-    const btn = document.getElementById('btn-submit');
-    btn.disabled = true; btn.innerText = "TRANSMISSION...";
+    const btn = document.querySelector('.btn-main-action');
+    btn.disabled = true; btn.innerText = "Envoi...";
 
     const data = {
         nom: document.getElementById('nom').value,
@@ -37,66 +27,50 @@ document.getElementById('apply-form').onsubmit = async (e) => {
         date: new Date().toLocaleString('fr-FR')
     };
 
-    await fetch(`${DB_URL}.json`, { method: 'POST', body: JSON.stringify(data) });
-    alert("Dossier envoyé avec succès !");
+    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(data) });
+    alert("Candidature envoyée !");
     location.reload();
 };
 
-// Admin Login
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
         document.getElementById('home-view').style.display = 'none';
         document.getElementById('admin-view').style.display = 'block';
-        document.getElementById('admin-indicator').style.display = 'block';
         loadAdmin();
     }
 }
 
 async function loadAdmin() {
-    const r = await fetch(`${DB_URL}.json`);
-    const data = await r.json();
-    const pendingList = document.getElementById('list-pending');
-    const admissionList = document.getElementById('list-admission');
-    
-    pendingList.innerHTML = ""; admissionList.innerHTML = "";
+    const res = await fetch(DB_URL);
+    const data = await res.json();
+    const pList = document.getElementById('list-pending');
+    const aList = document.getElementById('list-admission');
+    pList.innerHTML = ""; aList.innerHTML = "";
     if(!data) return;
 
     Object.entries(data).reverse().forEach(([id, c]) => {
-        const isPending = c.status === 'attente';
-        const cardClass = isPending ? 'pending' : (c.status === 'Accepté' ? 'accepted' : 'rejected');
-        
-        const cardHtml = `
-            <div class="admin-card ${cardClass}">
-                <div class="card-top">
-                    <span class="card-role-tag">${c.role.toUpperCase()}</span>
-                    <span class="card-date">${c.date}</span>
-                </div>
+        const isAttente = (c.status === 'attente');
+        const card = `
+            <div class="admin-card">
+                <span class="label">${c.role}</span>
                 <h3>${c.nom}</h3>
-                <div class="card-meta"><b>Discord:</b> ${c.discord} | <b>Pôle:</b> ${c.matiere}</div>
-                <div class="card-motivs">${c.motivations}</div>
-                <div class="card-actions">
-                    ${isPending ? `
-                        <button class="btn-approve" onclick="decider('${id}', 'Accepté')">ACCEPTER</button>
-                        <button class="btn-reject" onclick="decider('${id}', 'Refusé')">REFUSER</button>
-                    ` : `
-                        <div class="status-badge ${c.status === 'Accepté' ? 'badge-accepted' : 'badge-rejected'}">
-                            DOSSIER ${c.status.toUpperCase()}
-                        </div>
-                    `}
+                <div class="details">${c.discord} | ${c.matiere} | ${c.date}</div>
+                <div class="motiv-box">${c.motivations}</div>
+                <div class="btn-group">
+                    ${isAttente ? `
+                        <button class="btn-adm ok" onclick="decider('${id}', 'Accepté')">Accepter</button>
+                        <button class="btn-adm no" onclick="decider('${id}', 'Refusé')">Refuser</button>
+                    ` : `<div style="width:100%; font-weight:700; color:${c.status === 'Accepté' ? '#0071e3' : '#ff3b30'}">${c.status.toUpperCase()}</div>`}
                 </div>
-            </div>
-        `;
-
-        if(isPending) pendingList.innerHTML += cardHtml;
-        else admissionList.innerHTML += cardHtml;
+            </div>`;
+        if(isAttente) pList.innerHTML += card;
+        else aList.innerHTML += card;
     });
 }
 
-async function decider(id, stat) {
-    await fetch(`${DB_URL}/${id}.json`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: stat })
-    });
+async function decider(id, action) {
+    const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
+    await fetch(url, { method: 'PATCH', body: JSON.stringify({ status: action }) });
     loadAdmin();
 }
