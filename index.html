@@ -4,87 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Rosa Parks | Recrutement</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-<div class="bg-overlay"></div>
-
-<nav>
-    <div class="logo">CAMPUS <span>ROSA PARKS</span></div>
-    <div id="login-zone">
-        <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
-        <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="logo">CAMPUS <span>ROSA PARKS</span></div>
+        <div id="login-zone">
+            <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"></div>
+        </div>
     </div>
-    <div id="admin-indicator" style="display:none" class="admin-badge">ADMINISTRATION CONNECTÉE</div>
 </nav>
 
 <main class="container">
     <div id="home-view">
-        <section class="hero-card reveal">
-            <span class="top-tag">PRÉSENTATION</span>
+        <section class="content-block">
+            <span class="label">PRÉSENTATION</span>
             <h1>Qui sommes-nous ?</h1>
-            <p class="description">
-                Le <strong>Campus Rosa Parks</strong> est une institution virtuelle pionnière dans le domaine du <strong>Roleplay Éducatif</strong> sur Discord. Ici, chaque journée est rythmée par un <strong>Emploi Du Temps (EDT) rigoureux</strong> et des cours interactifs.
-            </p>
+            <p>Le <strong>Campus Rosa Parks</strong> est une institution virtuelle d'élite. Nous prônons l'excellence et la rigueur à travers un système scolaire immersif et structuré.</p>
         </section>
 
-        <section class="selection-area reveal">
-            <div class="grid-cards">
-                <div class="card-role" onclick="openForm('Professeur')">
-                    <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>PROFESSEUR</h3>
-                    <p>Pédagogie et gestion de classe</p>
-                    <div class="btn-fake">POSTULER</div>
-                </div>
-                <div class="card-role" onclick="openForm('AED')">
-                    <div class="icon-circle"><i class="fas fa-user-shield"></i></div>
-                    <h3>AED</h3>
-                    <p>Discipline et surveillance</p>
-                    <div class="btn-fake">POSTULER</div>
-                </div>
-            </div>
+        <section class="content-block">
+            <span class="label">RECRUTEMENT</span>
+            <h1>Pourquoi postuler ?</h1>
+            <p>Rejoindre nos équipes, c'est participer à un projet communautaire d'envergure. Nous recherchons des profils sérieux pour garantir une expérience RP de haute qualité.</p>
         </section>
+
+        <div class="role-grid">
+            <div class="card-modern" onclick="openForm('Professeur')">
+                <div class="icon-wrap"><i class="fas fa-graduation-cap"></i></div>
+                <h3>Professeur</h3>
+                <p>Enseignez et gérez vos classes avec rigueur.</p>
+                <div class="btn-fake">Postuler</div>
+            </div>
+            <div class="card-modern" onclick="openForm('AED')">
+                <div class="icon-wrap"><i class="fas fa-user-shield"></i></div>
+                <h3>AED</h3>
+                <p>Assurez la discipline et la vie scolaire.</p>
+                <div class="btn-fake">Postuler</div>
+            </div>
+        </div>
     </div>
 
     <section id="form-view" style="display:none">
         <div class="form-card">
-            <button class="btn-back" onclick="cancel()"><i class="fas fa-arrow-left"></i> RETOUR</button>
-            <h2 id="display-role">DOSSIER</h2>
+            <button class="btn-back-custom" onclick="cancel()">
+                <i class="fas fa-chevron-left"></i> Retour à l'accueil
+            </button>
+            <h2>Candidature</h2>
+            <p class="form-sub">Veuillez remplir les informations ci-dessous.</p>
+            
             <form id="apply-form">
                 <input type="hidden" id="input-role">
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label>Nom & Prénom RP</label>
-                        <input type="text" id="nom" placeholder="Ex: Jean Dupont" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Discord</label>
-                        <input type="text" id="discord" placeholder="pseudo_discord" required>
-                    </div>
+                <div class="input-row">
+                    <input type="text" id="nom" placeholder="Nom RP" required>
+                    <input type="text" id="discord" placeholder="Discord" required>
                 </div>
-                <div class="input-group">
-                    <label>Pôle / Matière</label>
-                    <input type="text" id="matiere" placeholder="Ex: Mathématiques / Vie Scolaire" required>
-                </div>
-                <div class="input-group">
-                    <label>Motivations</label>
-                    <textarea id="motivs" rows="5" placeholder="Pourquoi vous ?" required></textarea>
-                </div>
-                <button type="submit" class="btn-send" id="btn-submit">DÉPOSER LE DOSSIER</button>
+                <input type="text" id="matiere" placeholder="Poste souhaité" required>
+                <textarea id="motivs" rows="5" placeholder="Vos motivations..." required></textarea>
+                <button type="submit" class="btn-main-action">Déposer le dossier</button>
             </form>
         </div>
     </section>
 
     <section id="admin-view" style="display:none">
-        <h2 class="section-title"><i class="fas fa-inbox"></i> DOSSIERS ENTRANTS</h2>
-        <div id="list-pending" class="admin-grid"></div>
-
-        <h2 class="section-title" style="margin-top:50px;"><i class="fas fa-archive"></i> CENTRE D'ADMISSION</h2>
-        <div id="list-admission" class="admin-grid"></div>
+        <h2 class="admin-title">Dossiers à traiter</h2>
+        <div id="list-pending"></div>
+        <h2 class="admin-title" style="margin-top:50px">Archives</h2>
+        <div id="list-admission"></div>
     </section>
 </main>
 
