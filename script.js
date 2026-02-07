@@ -1,55 +1,7 @@
 const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
 const ADMIN_MAIL = "ce.0227235a@campus-rosaparks.fr";
 
-// --- ANIMATIONS ---
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-window.onscroll = () => {
-    if(window.scrollY === 0) {
-        document.querySelectorAll('.reset-me').forEach(el => el.classList.remove('active'));
-    }
-};
-
-// --- NAVIGATION ---
-function openForm(role) {
-    document.getElementById('home-view').style.display = 'none';
-    document.getElementById('form-view').style.display = 'block';
-    document.getElementById('input-role').value = role;
-    document.getElementById('display-role').innerText = "CANDIDATURE " + role.toUpperCase();
-    window.scrollTo(0,0);
-}
-
-function cancel() {
-    document.getElementById('form-view').style.display = 'none';
-    document.getElementById('home-view').style.display = 'block';
-}
-
-// --- LOGIQUE FIREBASE ---
-document.getElementById('apply-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btn-submit');
-    btn.innerText = "TRANSMISSION...";
-    btn.disabled = true;
-
-    const payload = {
-        nom: document.getElementById('nom').value,
-        discord: document.getElementById('discord').value,
-        matiere: document.getElementById('matiere').value,
-        motivations: document.getElementById('motivs').value,
-        role: document.getElementById('input-role').value,
-        status: "attente",
-        date: new Date().toLocaleString('fr-FR')
-    };
-
-    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(payload) });
-    alert("Dossier envoyé !");
-    location.reload();
-};
-
-// --- ADMIN ---
+// --- FONCTIONS DE BASE ---
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
@@ -65,33 +17,52 @@ async function loadAdmin() {
     const data = await res.json();
     const pending = document.getElementById('list-pending');
     const admission = document.getElementById('list-admission');
-    pending.innerHTML = ""; admission.innerHTML = "";
+    
+    pending.innerHTML = "";
+    admission.innerHTML = "";
 
     if(!data) return;
 
     Object.entries(data).reverse().forEach(([id, c]) => {
+        // Détermination du statut réel
+        const statusClean = c.status === 'en_attente' || c.status === 'attente' ? 'attente' : c.status;
+        
         const card = `
-            <div class="admin-card">
-                <div style="display:flex; justify-content:space-between; color:var(--blue); font-weight:800; font-size:0.8rem">
-                    <span>${c.role}</span><span>${c.date}</span>
+            <div class="admin-card" style="border-left-color: ${statusClean === 'Accepté' ? '#10b981' : (statusClean === 'Refusé' ? '#ef4444' : '#38bdf8')}">
+                <div class="card-header-pro">
+                    <span class="badge-role">${c.role}</span>
+                    <span class="card-date"><i class="far fa-clock"></i> ${c.date}</span>
                 </div>
                 <h3>${c.nom}</h3>
-                <p>Discord: ${c.discord} | Matière: ${c.matiere}</p>
-                <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; margin:10px 0;">${c.motivations}</div>
-                <div class="btn-zone">
-                    ${c.status === 'attente' ? `
-                        <button onclick="decider('${id}', 'Accepté')" style="background:#10b981; border:none; color:white; padding:10px; border-radius:5px; cursor:pointer; width:48%">ACCEPTER</button>
-                        <button onclick="decider('${id}', 'Refusé')" style="background:#ef4444; border:none; color:white; padding:10px; border-radius:5px; cursor:pointer; width:48%">REFUSER</button>
-                    ` : `<div class="status-tag ${c.status.toLowerCase()}">DOSSIER ${c.status.toUpperCase()}</div>`}
+                <div class="info-box">
+                    <span><b>Discord:</b> ${c.discord}</span>
+                    <span><b>Pôle:</b> ${c.matiere}</span>
+                </div>
+                <div class="motiv-embed">
+                    ${c.motivations}
+                </div>
+                <div class="btn-group">
+                    ${statusClean === 'attente' ? `
+                        <button class="btn-adm btn-accept" onclick="decider('${id}', 'Accepté')">Accepter</button>
+                        <button class="btn-adm btn-refuse" onclick="decider('${id}', 'Refusé')">Refuser</button>
+                    ` : `
+                        <div class="final-badge badge-${statusClean.toLowerCase()}">DOSSIER ${statusClean.toUpperCase()}</div>
+                    `}
                 </div>
             </div>`;
-        if(c.status === 'attente') pending.innerHTML += card;
+
+        if(statusClean === 'attente') pending.innerHTML += card;
         else admission.innerHTML += card;
     });
 }
 
 async function decider(id, action) {
     const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
-    await fetch(url, { method: 'PATCH', body: JSON.stringify({ status: action }) });
+    await fetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: action })
+    });
     loadAdmin();
 }
+
+// NAVIGATION... (garder tes fonctions openForm et cancel)
