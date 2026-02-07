@@ -1,89 +1,102 @@
-/* Style des dossiers en administration */
+:root {
+    --blue: #38bdf8;
+    --green: #10b981;
+    --red: #ef4444;
+    --card-bg: rgba(15, 23, 42, 0.7);
+}
+
+* { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
+body { background: #020617; color: #f8fafc; margin: 0; }
+
+.bg-stars { position: fixed; inset: 0; background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #020617 80%); z-index: -1; }
+
+.container { max-width: 900px; margin: 40px auto; padding: 20px; }
+
+/* STYLE DES CARTES (EMBED) */
 .admin-card {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    border-radius: 20px;
-    padding: 25px;
-    margin-bottom: 25px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
     position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid var(--blue); /* La barre de couleur style Embed */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
 }
 
-/* Bordure colorée à gauche selon l'importance */
-.admin-card::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 6px;
-    background: var(--blue); /* Bleu par défaut */
-    box-shadow: 0 0 15px var(--blue-glow);
-}
+.admin-card:hover { transform: scale(1.01); }
 
-/* En-tête du dossier */
-.card-header-admin {
+/* EN-TÊTE DE CARTE */
+.card-header-pro {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
     margin-bottom: 15px;
 }
 
-.role-label {
-    background: var(--blue-glow);
+.badge-role {
+    background: rgba(56, 189, 248, 0.15);
     color: var(--blue);
-    padding: 4px 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.card-date { font-size: 0.8rem; color: #64748b; }
+
+/* CONTENU DU DOSSIER */
+.admin-card h3 { margin: 0 0 12px 0; font-size: 1.5rem; letter-spacing: -0.5px; }
+
+.info-box {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+.info-box b { color: #fff; }
+
+.motiv-embed {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+/* BOUTONS MODERNE */
+.btn-group { display: flex; gap: 12px; }
+
+.btn-adm {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.btn-accept { background: var(--green); color: #fff; }
+.btn-refuse { background: var(--red); color: #fff; }
+.btn-adm:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+/* ÉTATS FINAUX */
+.final-badge {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
     border-radius: 8px;
     font-weight: 800;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.9rem;
 }
-
-.date-label {
-    font-size: 0.8rem;
-    color: #64748b;
-}
-
-/* Contenu du dossier */
-.admin-card h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.4rem;
-    color: #fff;
-}
-
-.info-line {
-    font-size: 0.95rem;
-    color: #cbd5e1;
-    margin-bottom: 15px;
-}
-
-.info-line b { color: var(--blue); }
-
-.motiv-text {
-    background: rgba(2, 6, 23, 0.5);
-    border-radius: 12px;
-    padding: 15px;
-    font-style: italic;
-    color: #94a3b8;
-    line-height: 1.6;
-    border: 1px inset rgba(255,255,255,0.05);
-}
-
-/* État final (Cadre bleu/vert/rouge) */
-.status-tag {
-    margin-top: 20px;
-    padding: 12px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.status-tag.attente { border: 1px solid #eab308; color: #eab308; background: rgba(234, 179, 8, 0.1); }
-.status-tag.accepté { border: 1px solid #10b981; color: #10b981; background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
-.status-tag.refusé { border: 1px solid #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+.badge-accepté { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--green); color: var(--green); }
+.badge-refusé { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--red); color: var(--red); }
