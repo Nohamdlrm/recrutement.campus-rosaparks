@@ -1,106 +1,102 @@
-// CONFIGURATION
-const FIREBASE_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
-const ADMIN_EMAIL = "ce.0227235a@campus-rosaparks.fr";
+// URL FIREBASE (Vérifie bien que le .json est à la fin)
+const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
+const ADMIN_MAIL = "ce.0227235a@campus-rosaparks.fr";
 
-// VERIFICATION ADMIN GOOGLE
-function checkAdmin(response) {
-    const user = JSON.parse(atob(response.credential.split('.')[1]));
-    
-    if(user.email === ADMIN_EMAIL) {
-        document.getElementById('admin-view').style.display = 'block';
-        document.getElementById('admin-logged').style.display = 'block';
-        document.getElementById('login-container').style.display = 'none';
-        fetchCandidates(); // Charge les données direct
-    } else {
-        alert("Accès refusé : Cette zone est réservée à l'administrateur du Campus Rosa Parks.");
+// 1. ANIMATIONS AU SCROLL
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+window.addEventListener('scroll', () => {
+    if(window.scrollY === 0) {
+        document.querySelectorAll('.reset-me').forEach(el => el.classList.remove('active'));
     }
-}
+});
 
-// NAVIGATION
-function openApp(role) {
-    document.getElementById('role-selection').style.display = 'none';
+// 2. NAVIGATION
+function openForm(role) {
+    document.getElementById('home-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
-    document.getElementById('role-val').value = role;
-    document.getElementById('form-title').innerText = "Candidature " + role.toUpperCase();
-    
-    // Adaptation des textes d'engagement
-    const engText = (role === 'prof') 
-        ? "Je confirme que je validerai Pronote avant 21h chaque soir et que je ne quitterai pas mes fonctions sans prévenir." 
-        : "Je confirme ma présence lors des surveillances et mon respect total des consignes administratives.";
-    document.getElementById('eng-text').innerText = engText;
-    
+    document.getElementById('input-role').value = role;
+    document.getElementById('display-role').innerText = "CANDIDATURE : " + role.toUpperCase();
     window.scrollTo(0,0);
 }
 
-function goBack() {
+function cancel() {
     document.getElementById('form-view').style.display = 'none';
-    document.getElementById('role-selection').style.display = 'block';
+    document.getElementById('home-view').style.display = 'block';
 }
 
-// ENVOI VERS FIREBASE (DATABASE)
-document.getElementById('applyForm').onsubmit = async function(e) {
+// 3. ENVOI DU FORMULAIRE
+document.getElementById('main-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const dossier = {
-        nom: document.getElementById('nom').value,
-        discord: document.getElementById('discord').value,
-        matiere: document.getElementById('matiere').value,
-        motiv: document.getElementById('motiv').value,
-        role: document.getElementById('role-val').value,
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerText = "TRANSMISSION EN COURS...";
+
+    const data = {
+        nom: document.getElementById('input-name').value,
+        discord: document.getElementById('input-discord').value,
+        matiere: document.getElementById('input-sub').value,
+        motivations: document.getElementById('input-motivs').value,
+        role: document.getElementById('input-role').value,
+        status: "attente",
         date: new Date().toLocaleString('fr-FR')
     };
 
     try {
-        const response = await fetch(FIREBASE_URL, {
+        const response = await fetch(DB_URL, {
             method: 'POST',
-            body: JSON.stringify(dossier),
+            body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' }
         });
 
-        if(response.ok) {
-            document.getElementById('pop-success').style.display = 'flex';
+        if (response.ok) {
+            alert("✅ Votre dossier a été transmis avec succès à la direction !");
+            location.reload();
         } else {
-            alert("Erreur lors de l'envoi. Vérifiez votre connexion.");
+            throw new Error('Erreur');
         }
-    } catch (error) {
-        console.error("Erreur Firebase:", error);
+    } catch (err) {
+        alert("❌ Erreur : Impossible de contacter la base de données. Vérifiez votre connexion.");
+        btn.disabled = false;
+        btn.innerText = "RÉESSAYER";
     }
-};
+});
 
-// RÉCUPÉRATION DES DONNÉES (ADMIN)
-async function fetchCandidates() {
-    const listDiv = document.getElementById('candidates-list');
-    listDiv.innerHTML = "Récupération des dossiers...";
+// 4. ADMIN LOGIN
+function handleAdmin(res) {
+    const user = JSON.parse(atob(res.credential.split('.')[1]));
+    if(user.email === ADMIN_MAIL) {
+        document.getElementById('home-view').style.display = 'none';
+        document.getElementById('admin-view').style.display = 'block';
+        document.getElementById('admin-indicator').style.display = 'block';
+        document.getElementById('login-zone').style.display = 'none';
+        loadAdmin();
+    } else {
+        alert("Accès refusé : Ce compte n'est pas autorisé.");
+    }
+}
 
-    try {
-        const response = await fetch(FIREBASE_URL);
-        const data = await response.json();
-
-        if(!data) {
-            listDiv.innerHTML = "Aucune candidature reçue pour le moment.";
-            return;
-        }
-
-        listDiv.innerHTML = "";
-        // On transforme l'objet en tableau pour le trier du plus récent au plus ancien
-        const entries = Object.entries(data).reverse();
-
-        entries.forEach(([id, c]) => {
-            const card = `
-                <div class="candidature-item">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span style="color:var(--accent); font-weight:bold;">${c.role.toUpperCase()}</span>
-                        <span style="font-size:0.8rem; opacity:0.6;">${c.date}</span>
-                    </div>
-                    <h3 style="margin:10px 0;">${c.nom}</h3>
-                    <p><b>Discord:</b> ${c.discord}</p>
-                    <p><b>Matière/Pôle:</b> ${c.matiere}</p>
-                    <p style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; font-style:italic;">"${c.motiv}"</p>
+async function loadAdmin() {
+    const r = await fetch(DB_URL);
+    const d = await r.json();
+    const list = document.getElementById('admin-list');
+    list.innerHTML = "";
+    if(!d) { list.innerHTML = "<p>Aucun dossier pour le moment.</p>"; return; }
+    
+    Object.entries(d).reverse().forEach(([id, c]) => {
+        list.innerHTML += `
+            <div class="admin-card" style="background:#1e293b; padding:25px; border-radius:20px; margin-bottom:15px; border-left:5px solid #0ea5e9; text-align:left;">
+                <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#0ea5e9; font-weight:700;">${c.role.toUpperCase()}</span>
+                    <small style="opacity:0.5">${c.date}</small>
                 </div>
-            `;
-            listDiv.innerHTML += card;
-        });
-    } catch (error) {
-        listDiv.innerHTML = "Erreur lors du chargement des données.";
-    }
+                <h3 style="margin:10px 0;">${c.nom}</h3>
+                <p><b>Discord:</b> ${c.discord} | <b>Pôle:</b> ${c.matiere}</p>
+                <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:10px; margin-top:10px;">${c.motivations}</div>
+            </div>`;
+    });
 }
