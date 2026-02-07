@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Rosa Parks | Recrutement</title>
+    <title>Campus Rosa Parks | Portail Officiel</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body>
-
-<nav class="navbar">
+<body class="light-mode"> <nav class="navbar">
     <div class="nav-content">
         <div class="logo">CAMPUS <span>ROSA PARKS</span></div>
-        <div id="login-zone">
-            <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"></div>
+        <div class="nav-right">
+            <button id="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+            <div id="login-zone">
+                <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
+                <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
+            </div>
         </div>
     </div>
 </nav>
+
+<div id="custom-popup" class="popup-overlay" style="display:none">
+    <div class="popup-content">
+        <i id="popup-icon" class="fas fa-check-circle"></i>
+        <h2 id="popup-title">Message</h2>
+        <p id="popup-text"></p>
+        <button onclick="closePopup()" class="btn-main">Compris</button>
+    </div>
+</div>
 
 <main class="container">
     <div id="home-view">
@@ -31,7 +41,7 @@
 
         <section class="content-block">
             <span class="label">RECRUTEMENT</span>
-            <h1>Pourquoi postuler ?</h1>
+            <h1>Pourquoi postuler chez nous ?</h1>
             <p>Rejoindre nos équipes, c'est participer à un projet communautaire d'envergure. Nous recherchons des profils sérieux pour garantir une expérience RP de haute qualité.</p>
         </section>
 
@@ -63,7 +73,7 @@
                 </div>
                 <input type="text" id="matiere" placeholder="Poste souhaité" required>
                 <textarea id="motivs" rows="5" placeholder="Vos motivations..." required></textarea>
-                <button type="submit" class="btn-main-action" id="btn-submit">Déposer le dossier</button>
+                <button type="submit" class="btn-main" id="btn-submit">Déposer le dossier</button>
             </form>
         </div>
     </section>
@@ -71,7 +81,6 @@
     <section id="admin-view" style="display:none">
         <h2 class="admin-title">Dossiers à traiter</h2>
         <div id="list-pending"></div>
-        
         <h2 class="admin-title" style="margin-top:60px">Archives des décisions</h2>
         <div id="list-admission"></div>
     </section>
