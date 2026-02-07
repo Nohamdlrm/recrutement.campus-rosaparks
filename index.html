@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Rosa Parks | Recrutement</title>
+    <title>Campus Rosa Parks | Direction</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -23,96 +23,19 @@
 </nav>
 
 <main class="container">
-    <div id="home-view">
-        <section class="hero-card reveal">
-            <div class="glow-point"></div>
-            <span class="top-tag">L'ÉTABLISSEMENT</span>
-            <h1>Qui sommes-nous ?</h1>
-            <p class="description">
-                Le <strong>Campus Rosa Parks</strong> est une institution virtuelle pionnière dans le domaine du <strong>Roleplay Éducatif</strong>. 
-                Nous offrons une immersion scolaire totale avec un <strong>EDT rigoureux</strong> et des cours interactifs.
-            </p>
-        </section>
-
-        <section class="hero-card reveal reset-me">
-            <span class="top-tag">RECRUTEMENT</span>
-            <h1>Pourquoi nous rejoindre ?</h1>
-            <p class="description">
-                Rejoindre notre équipe, c'est mettre son sérieux au service d'une communauté exigeante. Vous devenez un pilier de l'expérience RP de centaines de joueurs avec des outils de pointe.
-            </p>
-            <div class="mini-features">
-                <span><i class="fas fa-bolt"></i> Réalisme</span>
-                <span><i class="fas fa-shield-heart"></i> Équipe Pro</span>
-            </div>
-        </section>
-
-        <section class="selection-area reveal reset-me">
-            <div class="grid-cards">
-                <div class="card-role" onclick="openForm('Professeur')">
-                    <div class="icon-wrap"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>PROFESSEUR</h3>
-                    <p>Pédagogie & Gestion de classe</p>
-                    <div class="card-btn">POSTULER <i class="fas fa-arrow-right"></i></div>
-                </div>
-                <div class="card-role" onclick="openForm('AED')">
-                    <div class="icon-wrap"><i class="fas fa-user-shield"></i></div>
-                    <h3>AED</h3>
-                    <p>Discipline & Surveillance</p>
-                    <div class="card-btn">POSTULER <i class="fas fa-arrow-right"></i></div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <section id="form-view" style="display:none">
-        <div class="form-card">
-            <button class="btn-back" onclick="cancel()"><i class="fas fa-times"></i> ANNULER</button>
-            <h2 id="display-role">CANDIDATURE</h2>
-            <form id="apply-form">
-                <input type="hidden" id="input-role">
-                <div class="input-row">
-                    <div class="field">
-                        <label>Nom RP</label>
-                        <input type="text" id="nom" placeholder="Lucas Parks" required>
-                    </div>
-                    <div class="field">
-                        <label>Discord</label>
-                        <input type="text" id="discord" placeholder="lucas#0001" required>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Poste / Matière</label>
-                    <input type="text" id="matiere" placeholder="Ex: Mathématiques" required>
-                </div>
-                <div class="field">
-                    <label>Motivations</label>
-                    <textarea id="motivs" rows="5" placeholder="Décrivez votre projet..." required></textarea>
-                </div>
-                <button type="submit" class="btn-send" id="btn-submit">ENVOYER LE DOSSIER AU BUREAU <i class="fas fa-paper-plane"></i></button>
-            </form>
-        </div>
-    </section>
-
     <section id="admin-view" style="display:none">
-        <div class="admin-header">
-            <h2><i class="fas fa-inbox"></i> DOSSIERS ENTRANTS</h2>
+        <div class="admin-intro">
+            <h1>Tableau de Bord Administratif</h1>
+            <p>Gestion des dossiers de recrutement entrants.</p>
         </div>
+        
+        <h2 class="section-title"><i class="fas fa-envelope-open-text"></i> DOSSIERS ENTRANTS</h2>
         <div id="list-pending" class="admin-grid"></div>
 
-        <div class="admin-header" style="margin-top:60px;">
-            <h2><i class="fas fa-university"></i> CENTRE D'ADMISSION</h2>
-        </div>
+        <h2 class="section-title" style="margin-top:60px;"><i class="fas fa-archive"></i> CENTRE D'ADMISSION</h2>
         <div id="list-admission" class="admin-grid"></div>
     </section>
 </main>
-
-<footer>
-    <div class="social-box">
-        <a href="https://tiktok.com" class="s-link"><i class="fab fa-tiktok"></i> TikTok</a>
-        <a href="https://discord.gg" class="s-link"><i class="fab fa-discord"></i> Discord</a>
-    </div>
-    <p>© 2026 CAMPUS ROSA PARKS - TOUS DROITS RÉSERVÉS</p>
-</footer>
 
 <script src="script.js"></script>
 </body>
