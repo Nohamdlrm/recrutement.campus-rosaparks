@@ -1,89 +1,89 @@
-:root {
-    --blue: #38bdf8;
-    --blue-glow: rgba(56, 189, 248, 0.4);
-    --dark-bg: #020617;
-    --card-bg: rgba(15, 23, 42, 0.6);
+/* Style des dossiers en administration */
+.admin-card {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-* { box-sizing: border-box; font-family: 'Quicksand', sans-serif; scroll-behavior: smooth; }
-
-body { 
-    background: var(--dark-bg); 
-    color: #e2e8f0; 
-    margin: 0; 
-    overflow-x: hidden; 
+/* Bordure colorée à gauche selon l'importance */
+.admin-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--blue); /* Bleu par défaut */
+    box-shadow: 0 0 15px var(--blue-glow);
 }
 
-.bg-stars { 
-    position: fixed; inset: 0; 
-    background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #020617 80%); 
-    z-index: -1; 
+/* En-tête du dossier */
+.card-header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
 
-/* NAVBAR */
-nav { 
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.5rem 10%; background: rgba(2, 6, 23, 0.8);
-    backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1);
-    position: sticky; top: 0; z-index: 1000;
+.role-label {
+    background: var(--blue-glow);
+    color: var(--blue);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-.logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
-.logo span { color: var(--blue); text-shadow: 0 0 10px var(--blue-glow); }
 
-/* CONTAINER & REVEAL */
-.container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
-.reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.active { opacity: 1; transform: translateY(0); }
+.date-label {
+    font-size: 0.8rem;
+    color: #64748b;
+}
 
-/* HERO CARDS */
-.hero-card { 
-    background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05);
-    padding: 50px; border-radius: 30px; margin-bottom: 100px; position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+/* Contenu du dossier */
+.admin-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #fff;
 }
-h1 { font-size: 2.8rem; margin: 15px 0; color: #fff; line-height: 1.2; }
-.top-tag { color: var(--blue); font-weight: 800; font-size: 0.8rem; letter-spacing: 4px; }
-.description { font-size: 1.15rem; color: #94a3b8; line-height: 1.8; }
 
-/* ROLES CARDS */
-.grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-.card-role { 
-    background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-    padding: 40px; border-radius: 25px; transition: 0.4s; cursor: pointer; text-align: center;
+.info-line {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 15px;
 }
-.card-role:hover { 
-    transform: translateY(-10px); border-color: var(--blue);
-    box-shadow: 0 0 30px var(--blue-glow);
-}
-.icon-wrap { font-size: 3rem; color: var(--blue); margin-bottom: 20px; }
-.card-btn { margin-top: 20px; font-weight: 700; color: var(--blue); font-size: 0.9rem; }
 
-/* FORMULAIRE */
-.form-card { 
-    background: #0f172a; border-radius: 35px; padding: 45px; 
-    border: 1px solid var(--blue); box-shadow: 0 0 50px rgba(0,0,0,0.5);
-}
-.field { margin-bottom: 25px; }
-label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--blue); }
-input, textarea { 
-    width: 100%; background: #020617; border: 1px solid rgba(255,255,255,0.1);
-    padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem;
-}
-input:focus, textarea:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 10px var(--blue-glow); }
-.btn-send { 
-    width: 100%; background: var(--blue); color: #000; border: none;
-    padding: 20px; border-radius: 15px; font-weight: 800; cursor: pointer;
-    transition: 0.3s;
-}
-.btn-send:hover { transform: scale(1.02); filter: brightness(1.1); }
+.info-line b { color: var(--blue); }
 
-/* ADMIN */
-.admin-card { background: #111827; padding: 25px; border-radius: 20px; border-left: 6px solid var(--blue); margin-bottom: 20px; }
-.status-tag { padding: 10px; border-radius: 10px; text-align: center; font-weight: 800; margin-top: 15px; }
-.accepté { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-.refusé { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.motiv-text {
+    background: rgba(2, 6, 23, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    font-style: italic;
+    color: #94a3b8;
+    line-height: 1.6;
+    border: 1px inset rgba(255,255,255,0.05);
+}
 
-/* FOOTER */
-footer { padding: 80px 0 40px; text-align: center; opacity: 0.7; }
-.social-box { margin-bottom: 20px; }
-.s-link { text-decoration: none; color: #fff; margin: 0 15px; font-weight: 700; padding: 10px 20px; border-radius: 50px; background: rgba(255,255,255,0.05); }
+/* État final (Cadre bleu/vert/rouge) */
+.status-tag {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.status-tag.attente { border: 1px solid #eab308; color: #eab308; background: rgba(234, 179, 8, 0.1); }
+.status-tag.accepté { border: 1px solid #10b981; color: #10b981; background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
+.status-tag.refusé { border: 1px solid #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
