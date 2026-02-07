@@ -6,61 +6,41 @@ function toggleTheme() {
     document.body.classList.toggle('light-mode');
 }
 
-// POPUP PERSONNALISÉE
-function showPopup(title, text, isConfirm = false, onConfirm = null) {
-    const overlay = document.getElementById('popup-overlay');
-    const actions = document.getElementById('p-actions');
-    document.getElementById('p-title').innerText = title;
-    document.getElementById('p-text').innerText = text;
-    
-    actions.innerHTML = "";
-    if(isConfirm) {
-        const bY = document.createElement('button'); bY.className="btn-y"; bY.innerText="Confirmer";
-        bY.onclick = () => { onConfirm(); overlay.style.display='none'; };
-        const bN = document.createElement('button'); bN.className="btn-n"; bN.innerText="Annuler";
-        bN.onclick = () => overlay.style.display='none';
-        actions.append(bN, bY);
-    } else {
-        const bOk = document.createElement('button'); bOk.className="btn-primary"; bOk.innerText="D'accord";
-        bOk.onclick = () => overlay.style.display='none';
-        actions.append(bOk);
-    }
+// GESTION POPUPS & LOADER
+const overlay = document.getElementById('overlay');
+const box = document.getElementById('popup-box');
+
+function showMsg(title, text, type = "info", onConfirm = null) {
+    box.innerHTML = `
+        <h2 style="margin-bottom:15px">${title}</h2>
+        <p style="margin-bottom:25px; opacity:0.8">${text}</p>
+        <div style="display:flex; gap:10px">
+            ${onConfirm ? `<button class="btn-main" style="background:#f2f2f7; color:#000" onclick="closePop()">Annuler</button>` : ''}
+            <button class="btn-main" id="pop-ok-btn">${onConfirm ? 'Confirmer' : 'D\'accord'}</button>
+        </div>
+    `;
     overlay.style.display = 'flex';
+    document.getElementById('pop-ok-btn').onclick = () => {
+        if(onConfirm) onConfirm();
+        closePop();
+    };
 }
 
-// ACTUALISER AVEC CHARGEMENT ET CONFIRMATION
+function closePop() { overlay.style.display = 'none'; }
+
+// ACTUALISER AVEC SPINNER 3S
 async function refreshData() {
-    const loader = document.getElementById('loader-overlay');
-    const spinner = loader.querySelector('.spinner');
-    const statusText = loader.querySelector('p');
-    const loaderBox = loader.querySelector('.loader-box');
+    box.innerHTML = `<div class="spinner"></div><p>Synchronisation avec la base...</p>`;
+    overlay.style.display = 'flex';
 
-    // 1. On affiche le loader
-    loader.style.display = 'flex';
-    statusText.innerText = "Synchronisation avec la base de données...";
-    spinner.style.display = "block";
-
-    // 2. On attend 5 secondes (avec le rond qui tourne à 3s/tour)
     setTimeout(async () => {
-        await loadAdmin(); // On recharge les données en arrière-plan
-        
-        // 3. On transforme le loader en message de succès
-        spinner.style.display = "none";
-        statusText.innerHTML = "<i class='fas fa-check-circle' style='color:#34c759; font-size:2rem; margin-bottom:10px; display:block;'></i> Données actualisées avec succès !";
-        
-        // 4. On ajoute le bouton "D'accord" s'il n'existe pas déjà
-        if (!document.getElementById('btn-close-loader')) {
-            const btnOk = document.createElement('button');
-            btnOk.id = "btn-close-loader";
-            btnOk.className = "btn-primary";
-            btnOk.style.marginTop = "20px";
-            btnOk.innerText = "D'accord";
-            btnOk.onclick = () => {
-                loader.style.display = 'none';
-                btnOk.remove(); // On le retire pour la prochaine fois
-            };
-            loaderBox.appendChild(btnOk);
-        }
+        await loadAdmin();
+        box.innerHTML = `
+            <i class="fas fa-check-circle" style="color:#34c759; font-size:3.5rem; margin-bottom:15px; display:block;"></i>
+            <h2>Bien actualisé</h2>
+            <p style="margin-top:10px">Les dossiers sont à jour.</p>
+            <button class="btn-main" style="margin-top:20px" onclick="closePop()">D'accord</button>
+        `;
     }, 5000); 
 }
 
@@ -75,6 +55,7 @@ function cancel() {
     document.getElementById('home-view').style.display = 'block';
 }
 
+// ENVOI
 document.getElementById('apply-form').onsubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -87,10 +68,11 @@ document.getElementById('apply-form').onsubmit = async (e) => {
         date: new Date().toLocaleString('fr-FR')
     };
     await fetch(DB_URL, { method: 'POST', body: JSON.stringify(data) });
-    showPopup("Dossier Transmis", "Votre candidature a été envoyée. La direction traite les dossiers sous 24h. Ne pas relancer sous peine de refus.");
+    showMsg("Dossier Envoyé", "Votre dossier a été transmis à la direction. Décision sous 24h.");
     cancel();
 };
 
+// ADMIN
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
@@ -98,7 +80,7 @@ function handleAdmin(res) {
         document.getElementById('admin-view').style.display = 'block';
         loadAdmin();
     } else {
-        showPopup("Accès Interdit", "Vous n'êtes pas administrateur de la base. Contactez la direction pour plus d'infos.", false);
+        showMsg("Accès Refusé", "Vous n'êtes pas administrateur.");
     }
 }
 
@@ -113,11 +95,11 @@ async function loadAdmin() {
     Object.entries(data).reverse().forEach(([id, c]) => {
         const card = `
             <div class="embed-card ${c.status.toLowerCase()}">
-                <button class="btn-del" onclick="askDelete('${id}')"><i class="fas fa-trash"></i></button>
+                <button class="btn-trash" onclick="askDel('${id}')"><i class="fas fa-trash"></i></button>
                 <p><b>Prenom & Nom Rp :</b> ${c.nom}</p>
                 <p><b>Discord :</b> ${c.discord}</p>
                 <p><b>Poste :</b> ${c.matiere}</p>
-                <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; margin:10px 0;">
+                <div style="background:rgba(0,0,0,0.05); padding:15px; border-radius:12px; margin:15px 0;">
                     <b>Motivation :</b><br>${c.motivations}
                 </div>
                 ${c.status === 'attente' ? `
@@ -136,8 +118,8 @@ async function decide(id, s) {
     loadAdmin();
 }
 
-function askDelete(id) {
-    showPopup("Confirmation", "Voulez-vous supprimer définitivement ce dossier ?", true, async () => {
+function askDel(id) {
+    showMsg("Confirmation", "Voulez-vous supprimer définitivement ce dossier ?", "warning", async () => {
         await fetch(`https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`, { method: 'DELETE' });
         loadAdmin();
     });
