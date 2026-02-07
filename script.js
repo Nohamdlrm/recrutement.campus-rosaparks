@@ -14,8 +14,9 @@ function cancel() {
 
 document.getElementById('apply-form').onsubmit = async (e) => {
     e.preventDefault();
-    const btn = document.querySelector('.btn-main-action');
-    btn.disabled = true; btn.innerText = "Envoi...";
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerText = "Envoi en cours..."; // Correction ici
 
     const data = {
         nom: document.getElementById('nom').value,
@@ -28,7 +29,7 @@ document.getElementById('apply-form').onsubmit = async (e) => {
     };
 
     await fetch(DB_URL, { method: 'POST', body: JSON.stringify(data) });
-    alert("Candidature envoyée !");
+    alert("Dossier envoyé avec succès !");
     location.reload();
 };
 
@@ -51,19 +52,26 @@ async function loadAdmin() {
 
     Object.entries(data).reverse().forEach(([id, c]) => {
         const isAttente = (c.status === 'attente');
+        const borderColor = c.status === 'Accepté' ? '#2ecc71' : (c.status === 'Refusé' ? '#e74c3c' : '#3498db');
+        
         const card = `
-            <div class="admin-card">
-                <span class="label">${c.role}</span>
-                <h3>${c.nom}</h3>
-                <div class="details">${c.discord} | ${c.matiere} | ${c.date}</div>
-                <div class="motiv-box">${c.motivations}</div>
-                <div class="btn-group">
-                    ${isAttente ? `
-                        <button class="btn-adm ok" onclick="decider('${id}', 'Accepté')">Accepter</button>
-                        <button class="btn-adm no" onclick="decider('${id}', 'Refusé')">Refuser</button>
-                    ` : `<div style="width:100%; font-weight:700; color:${c.status === 'Accepté' ? '#0071e3' : '#ff3b30'}">${c.status.toUpperCase()}</div>`}
-                </div>
+            <div class="embed-card" style="border-left-color: ${borderColor}">
+                <h3>Candidature : ${c.nom}</h3>
+                <div class="embed-field"><b>Rôle :</b> ${c.role}</div>
+                <div class="embed-field"><b>Discord :</b> ${c.discord}</div>
+                <div class="embed-field"><b>Poste :</b> ${c.matiere}</div>
+                <div class="embed-field"><b>Date :</b> ${c.date}</div>
+                <div class="embed-motiv">"${c.motivations}"</div>
+                ${isAttente ? `
+                    <div class="decision-row">
+                        <button class="btn-choice btn-accept" onclick="decider('${id}', 'Accepté')">Accepter le dossier</button>
+                        <button class="btn-choice btn-refuse" onclick="decider('${id}', 'Refusé')">Refuser le dossier</button>
+                    </div>
+                ` : `
+                    <div class="status-badge badge-${c.status.toLowerCase()}">DÉCISION : ${c.status.toUpperCase()}</div>
+                `}
             </div>`;
+        
         if(isAttente) pList.innerHTML += card;
         else aList.innerHTML += card;
     });
@@ -72,5 +80,5 @@ async function loadAdmin() {
 async function decider(id, action) {
     const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
     await fetch(url, { method: 'PATCH', body: JSON.stringify({ status: action }) });
-    loadAdmin();
+    loadAdmin(); // Recharge automatiquement les listes
 }
