@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Rosa Parks | Portail</title>
+    <title>Campus Rosa Parks | Direction</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -35,7 +35,7 @@
 <div id="loader-overlay" class="overlay" style="display:none">
     <div class="loader-box">
         <div class="spinner"></div>
-        <p>Synchronisation en cours...</p>
+        <p>Synchronisation avec le Campus...</p>
     </div>
 </div>
 
@@ -44,57 +44,57 @@
         <div class="hero-grid">
             <section class="info-card">
                 <h1>Qui sommes-nous ?</h1>
-                <p>Le <strong>Campus Rosa Parks</strong> est une institution virtuelle d'élite prônant la rigueur et l'excellence scolaire.</p>
+                <p>Le <strong>Campus Rosa Parks</strong> est une institution d'élite. Nous formons les leaders de demain dans un cadre RP strict et immersif.</p>
             </section>
             <section class="info-card">
                 <h1>Pourquoi postuler ?</h1>
-                <p>Nous recherchons des profils sérieux pour garantir une expérience immersive de haute qualité.</p>
+                <p>Rejoindre notre équipe, c'est intégrer une structure organisée où le professionnalisme est la règle d'or.</p>
             </section>
         </div>
 
         <div class="role-grid">
-            <div class="role-item" onclick="openForm('Professeur')">
+            <div class="role-card" onclick="openForm('Professeur')">
                 <i class="fas fa-graduation-cap"></i>
                 <h3>Professeur</h3>
-                <span class="btn-st">Postuler</span>
+                <span class="btn-sm">Postuler</span>
             </div>
-            <div class="role-item" onclick="openForm('AED')">
+            <div class="role-card" onclick="openForm('AED')">
                 <i class="fas fa-user-shield"></i>
                 <h3>AED</h3>
-                <span class="btn-st">Postuler</span>
+                <span class="btn-sm">Postuler</span>
             </div>
         </div>
     </div>
 
     <section id="form-view" style="display:none">
-        <div class="form-container">
-            <button class="btn-back" onclick="cancel()"><i class="fas fa-arrow-left"></i> Retour</button>
-            <h2>Candidature Administrative</h2>
+        <div class="glass-card">
+            <button class="btn-back" onclick="cancel()"><i class="fas fa-chevron-left"></i> Retour</button>
+            <h2>Candidature</h2>
             <form id="apply-form">
                 <input type="hidden" id="input-role">
                 <div class="form-row">
                     <input type="text" id="nom" placeholder="Prénom & Nom RP" required>
                     <input type="text" id="discord" placeholder="Discord" required>
                 </div>
-                <input type="text" id="matiere" placeholder="Poste ou Discipline" required>
-                <textarea id="motivs" rows="6" placeholder="Vos motivations..." required></textarea>
-                <button type="submit" class="btn-submit">Soumettre le dossier</button>
+                <input type="text" id="matiere" placeholder="Poste souhaité" required>
+                <textarea id="motivs" rows="5" placeholder="Vos motivations..." required></textarea>
+                <button type="submit" class="btn-primary">Envoyer le dossier</button>
             </form>
         </div>
     </section>
 
     <section id="admin-view" style="display:none">
         <div class="admin-header">
-            <h2>Direction Générale</h2>
-            <button class="btn-sync" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Actualiser</button>
+            <h2>Administration</h2>
+            <button class="btn-refresh" onclick="refreshData()"><i class="fas fa-sync"></i> Actualiser</button>
         </div>
-        <div class="admin-grid">
+        <div class="admin-lists">
             <div class="admin-col">
-                <h3 class="col-title">DOSSIERS À TRAITER</h3>
+                <h3 class="title-tag">EN ATTENTE</h3>
                 <div id="list-pending"></div>
             </div>
             <div class="admin-col">
-                <h3 class="col-title">ARCHIVES</h3>
+                <h3 class="title-tag">ARCHIVES</h3>
                 <div id="list-admission"></div>
             </div>
         </div>
