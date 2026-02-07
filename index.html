@@ -3,89 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recrutement | Campus Rosa Parks</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Campus Rosa Parks | Recrutement Officiel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
+<div class="bg-stars"></div>
+
 <nav>
-    <div class="logo-text">ROSA PARKS RECRUTEMENT</div>
-    <div id="login-container">
-        <div id="g_id_onload" 
-             data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" 
-             data-callback="checkAdmin">
-        </div>
-        <div class="g_id_signin" data-type="icon" data-shape="circle"></div>
+    <div class="logo">CAMPUS <span>ROSA PARKS</span></div>
+    <div id="login-zone">
+        <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
+        <div class="g_id_signin" data-type="standard"></div>
     </div>
-    <div id="admin-logged" class="admin-badge" style="display:none">Admin Connecté ✅</div>
+    <div id="admin-indicator" style="display:none" class="admin-badge">DIRECTION CONNECTÉE ✅</div>
 </nav>
 
-<div class="container">
-    <div id="role-selection">
-        <div class="header-title">
-            <h1>Rejoignez l'Équipe</h1>
-            <span class="instruction">💡 Cliquez sur une carte pour ouvrir le formulaire</span>
-        </div>
-        <div class="selection-grid">
-            <div class="glass-card" onclick="openApp('prof')">
-                <div class="icon">🎓</div>
-                <h2>Professeur</h2>
-                <p>Enseignez au Campus</p>
+<main class="container">
+    <div id="home-view">
+        <section class="hero-card reveal">
+            <span class="top-tag">L'ÉTABLISSEMENT</span>
+            <h1>Qui sommes-nous ?</h1>
+            <p class="description">
+                Le <strong>Campus Rosa Parks</strong> n'est pas qu'un simple serveur de jeu, c'est une institution virtuelle pionnière dans le domaine du <strong>Roleplay Éducatif</strong> sur Discord. Notre projet repose sur une ambition claire : offrir une immersion scolaire totale et réaliste. 
+                <br><br>
+                Ici, chaque journée est rythmée par un <strong>Emploi Du Temps (EDT) rigoureux</strong>, des cours interactifs et une vie lycéenne bouillonnante. Notre structure est pilotée par une équipe de direction complète qui veille au réalisme de chaque scène, transformant chaque interaction en un moment d'apprentissage ou de camaraderie inoubliable.
+            </p>
+        </section>
+
+        <section class="hero-card reveal reset-me">
+            <span class="top-tag">RECRUTEMENT</span>
+            <h1>Pourquoi nous rejoindre ?</h1>
+            <p class="description">
+                Postuler au sein du Campus Rosa Parks, c'est choisir de mettre ses compétences au service d'une communauté exigeante et passionnée. Nous recherchons des profils capables d'allier <strong>sérieux, créativité et pédagogie</strong>. 
+                <br><br>
+                En rejoignant notre équipe, vous ne devenez pas seulement un membre du staff : vous devenez un pilier de l'expérience RP de centaines de joueurs. Vous bénéficierez d'un encadrement structuré, d'outils de gestion de pointe (système Pronote) et d'une progression de carrière au sein de notre hiérarchie administrative. Nous valorisons l'initiative, la présence et le respect des protocoles qui font la renommée de notre campus.
+            </p>
+            <div class="mini-features">
+                <span><i class="fas fa-clock"></i> EDT Dynamique</span>
+                <span><i class="fas fa-shield-halved"></i> Staff Pro</span>
+                <span><i class="fas fa-rocket"></i> Évolution</span>
             </div>
-            <div class="glass-card" onclick="openApp('aed')">
-                <div class="icon">🛡️</div>
-                <h2>AED</h2>
-                <p>Gérez la vie scolaire</p>
+        </section>
+
+        <section class="selection-area reveal reset-me">
+            <h2 class="select-title">Candidature Administrative</h2>
+            <div class="grid-cards">
+                <div class="card-role" onclick="openForm('Professeur')">
+                    <div class="circle-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>PROFESSEUR</h3>
+                    <p>Enseignez et gérez vos classes</p>
+                    <span class="btn-fake">POSTULER</span>
+                </div>
+                <div class="card-role" onclick="openForm('AED')">
+                    <div class="circle-icon"><i class="fas fa-user-shield"></i></div>
+                    <h3>AED</h3>
+                    <p>Maintenez l'ordre et le respect</p>
+                    <span class="btn-fake">POSTULER</span>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
 
-    <div id="form-view" class="form-container">
-        <span class="close-form" onclick="goBack()">✕ ANNULER</span>
-        <h2 id="form-title" style="color: var(--accent);">Dossier de Candidature</h2>
-        <form id="applyForm">
-            <input type="hidden" id="role-val">
-            <div class="input-row">
-                <input type="text" id="nom" placeholder="Prénom & Nom RP" required>
-                <input type="text" id="discord" placeholder="Pseudo Discord" required>
-            </div>
-            <input type="text" id="matiere" placeholder="Matière ou Pôle de surveillance" required>
-            <textarea id="motiv" rows="5" placeholder="Quelles sont vos motivations ?" required></textarea>
+    <section id="form-view" style="display:none">
+        <div class="form-card">
+            <button class="btn-back" onclick="cancel()">✕ Annuler et retourner à l'accueil</button>
+            <h2 id="display-role">DOSSIER DE CANDIDATURE</h2>
             
-            <div class="rules-box">
-                <div class="check-item">
-                    <input type="checkbox" required>
-                    <label>Je m'engage à être actif et à ne pas spam pour une réponse.</label>
+            <form id="main-form">
+                <input type="hidden" id="input-role">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Identité RP</label>
+                        <input type="text" id="input-name" placeholder="Prénom Nom" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Discord</label>
+                        <input type="text" id="input-discord" placeholder="pseudo_discord" required>
+                    </div>
                 </div>
-                <div class="check-item">
-                    <input type="checkbox" required>
-                    <label id="eng-text"></label>
+                <div class="input-group">
+                    <label>Matière ou Pôle visé</label>
+                    <input type="text" id="input-sub" placeholder="Ex: Histoire / Surveillance" required>
                 </div>
-            </div>
-            <button type="submit" class="btn-submit">ENVOYER LE DOSSIER</button>
-        </form>
-    </div>
-
-    <div id="admin-view" class="admin-section">
-        <div class="admin-header">
-            <h2>Dossiers Reçus (Base de Données)</h2>
-            <button class="btn-refresh" onclick="fetchCandidates()">Actualiser ↻</button>
+                <div class="input-group">
+                    <label>Vos Motivations Professionnelles</label>
+                    <textarea id="input-motivs" rows="6" placeholder="Expliquez votre parcours et vos envies..." required></textarea>
+                </div>
+                <div class="engagement">
+                    <label class="custom-check">
+                        <input type="checkbox" required>
+                        <span class="box"></span> Je certifie être sérieux et actif.
+                    </label>
+                </div>
+                <button type="submit" class="btn-send" id="btn-submit">TRANSMETTRE LE DOSSIER</button>
+            </form>
         </div>
-        <div id="candidates-list">Chargement des dossiers...</div>
-    </div>
-</div>
+    </section>
 
-<div class="popup-overlay" id="pop-success">
-    <div class="popup-box">
-        <div class="check-icon">✓</div>
-        <h2>DOSSIER TRANSMIS</h2>
-        <p>Votre candidature est enregistrée dans le Cloud.</p>
-        <div class="timer-box">RÉPONSE SOUS 24H</div>
-        <button class="btn-submit" onclick="location.reload()">RETOUR</button>
+    <section id="admin-view" style="display:none">
+        <h2 class="admin-title">Dossiers Entrants</h2>
+        <div id="admin-list"></div>
+    </section>
+</main>
+
+<footer>
+    <div class="social-box">
+        <a href="https://www.tiktok.com/@campus_rosa_parks" target="_blank" class="s-link tt"><i class="fab fa-tiktok"></i> tiktok</a>
+        <a href="https://discord.gg/rosaparks" target="_blank" class="s-link dc"><i class="fab fa-discord"></i> discord</a>
     </div>
-</div>
+    <p class="copyright-mini">© 2026 campus rosa parks - réalisé pour le staff</p>
+</footer>
 
 <script src="script.js"></script>
 </body>
