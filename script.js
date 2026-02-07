@@ -1,31 +1,40 @@
 const DB_URL = "https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures.json";
 const ADMIN_MAIL = "ce.0227235a@campus-rosaparks.fr";
 
-// MODE SOMBRE/CLAIR
+// MODE SOMBRE
 function toggleTheme() {
-    const body = document.body;
-    const icon = document.querySelector('#theme-toggle i');
-    if(body.classList.contains('light-mode')) {
-        body.classList.replace('light-mode', 'dark-mode');
-        icon.classList.replace('fa-moon', 'fa-sun');
+    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('light-mode');
+}
+
+// POPUP UNIQUE
+function popup(title, text, isConfirm = false, onConfirm = null) {
+    const overlay = document.getElementById('popup-overlay');
+    const actions = document.getElementById('p-actions');
+    document.getElementById('p-title').innerText = title;
+    document.getElementById('p-text').innerText = text;
+    
+    actions.innerHTML = "";
+    if(isConfirm) {
+        const bY = document.createElement('button'); bY.className="btn-y"; bY.innerText="Confirmer";
+        bY.onclick = () => { onConfirm(); overlay.style.display='none'; };
+        const bN = document.createElement('button'); bN.className="btn-n"; bN.innerText="Annuler";
+        bN.onclick = () => overlay.style.display='none';
+        actions.append(bN, bY);
     } else {
-        body.classList.replace('dark-mode', 'light-mode');
-        icon.classList.replace('fa-sun', 'fa-moon');
+        const bOk = document.createElement('button'); bOk.className="btn-submit"; bOk.innerText="OK";
+        bOk.onclick = () => overlay.style.display='none';
+        actions.append(bOk);
     }
+    overlay.style.display = 'flex';
 }
 
-// POPUP PERSONNALISÉE
-function showPopup(title, text, type) {
-    const popup = document.getElementById('custom-popup');
-    const icon = document.getElementById('popup-icon');
-    document.getElementById('popup-title').innerText = title;
-    document.getElementById('popup-text').innerText = text;
-    icon.className = type === 'success' ? 'fas fa-check-circle success-icon' : 'fas fa-exclamation-triangle error-icon';
-    popup.style.display = 'flex';
-}
-
-function closePopup() {
-    document.getElementById('custom-popup').style.display = 'none';
+function refreshData() {
+    document.getElementById('loader-overlay').style.display = 'flex';
+    setTimeout(async () => {
+        await loadAdmin();
+        document.getElementById('loader-overlay').style.display = 'none';
+    }, 5000);
 }
 
 function openForm(role) {
@@ -39,13 +48,8 @@ function cancel() {
     document.getElementById('home-view').style.display = 'block';
 }
 
-// ENVOI FORMULAIRE
 document.getElementById('apply-form').onsubmit = async (e) => {
     e.preventDefault();
-    const btn = document.getElementById('btn-submit');
-    btn.disabled = true;
-    btn.innerText = "Envoi en cours...";
-
     const data = {
         nom: document.getElementById('nom').value,
         discord: document.getElementById('discord').value,
@@ -55,15 +59,11 @@ document.getElementById('apply-form').onsubmit = async (e) => {
         status: "attente",
         date: new Date().toLocaleString('fr-FR')
     };
-
     await fetch(DB_URL, { method: 'POST', body: JSON.stringify(data) });
-    showPopup("Dossier Envoyé", "Votre dossier a bien été envoyé à la direction. La direction prend les décisions en moins de 24h. Merci de ne pas relancer votre candidature sous un refus.", "success");
+    popup("Dossier Envoyé", "Votre dossier a bien été envoyé. Décision sous 24h. Ne relancez pas en cas de refus.");
     cancel();
-    btn.disabled = false;
-    btn.innerText = "Déposer le dossier";
 };
 
-// CONNEXION ADMIN
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
@@ -71,7 +71,7 @@ function handleAdmin(res) {
         document.getElementById('admin-view').style.display = 'block';
         loadAdmin();
     } else {
-        showPopup("Accès Refusé", "Vous n'êtes pas administrateur de la base. Pour en savoir plus, contactez l'administration.", "error");
+        popup("Accès Refusé", "Vous n'êtes pas administrateur. Contactez la direction.", false);
     }
 }
 
@@ -84,36 +84,33 @@ async function loadAdmin() {
     if(!data) return;
 
     Object.entries(data).reverse().forEach(([id, c]) => {
-        const isAttente = (c.status === 'attente');
         const card = `
             <div class="embed-card ${c.status.toLowerCase()}">
-                <button class="btn-delete" onclick="deleteDoc('${id}')"><i class="fas fa-trash"></i></button>
-                <h3>Candidature : ${c.nom}</h3>
-                <p><b>Discord :</b> ${c.discord} | <b>Poste :</b> ${c.matiere}</p>
-                <p style="font-size:0.8rem; color:grey;">Déposé le : ${c.date}</p>
-                <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:5px; margin-top:10px;">${c.motivations}</div>
-                ${isAttente ? `
-                    <div class="decision-row">
-                        <button class="btn-choice btn-accept" onclick="decider('${id}', 'Accepté')">Accepter</button>
-                        <button class="btn-choice btn-refuse" onclick="decider('${id}', 'Refusé')">Refuser</button>
-                    </div>
-                ` : `<div style="margin-top:10px; font-weight:700;">STATUS : ${c.status.toUpperCase()}</div>`}
+                <button class="btn-trash" onclick="askDel('${id}')"><i class="fas fa-trash"></i></button>
+                <p><b>Prenom & Nom Rp :</b> ${c.nom}</p>
+                <p><b>Discord :</b> ${c.discord}</p>
+                <p><b>Poste :</b> ${c.matiere}</p>
+                <p><b>Motivation :</b><br>${c.motivations}</p>
+                <hr style="margin:10px 0; opacity:0.1">
+                ${c.status === 'attente' ? `
+                    <button class="btn-sync" style="background:#34c759" onclick="decide('${id}','Accepté')">Accepter</button>
+                    <button class="btn-sync" style="background:#ff3b30; margin-left:10px" onclick="decide('${id}','Refusé')">Refuser</button>
+                ` : `<b>DÉCISION : ${c.status.toUpperCase()}</b>`}
             </div>`;
-        if(isAttente) pList.innerHTML += card;
-        else aList.innerHTML += card;
+        c.status === 'attente' ? pList.innerHTML += card : aList.innerHTML += card;
     });
 }
 
-async function decider(id, action) {
-    const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
-    await fetch(url, { method: 'PATCH', body: JSON.stringify({ status: action }) });
+async function decide(id, s) {
+    await fetch(`https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`, {
+        method: 'PATCH', body: JSON.stringify({ status: s })
+    });
     loadAdmin();
 }
 
-async function deleteDoc(id) {
-    if(confirm("Supprimer définitivement ce dossier ?")) {
-        const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
-        await fetch(url, { method: 'DELETE' });
+function askDel(id) {
+    popup("Confirmation", "Voulez-vous supprimer définitivement ce dossier ?", true, async () => {
+        await fetch(`https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`, { method: 'DELETE' });
         loadAdmin();
-    }
+    });
 }
