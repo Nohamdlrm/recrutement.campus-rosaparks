@@ -18,7 +18,7 @@ function openForm(role) {
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
     document.getElementById('input-role').value = role;
-    document.getElementById('display-role').innerText = "CANDIDATURE : " + role;
+    document.getElementById('display-role').innerText = "CANDIDATURE " + role.toUpperCase();
     window.scrollTo(0,0);
 }
 
@@ -27,12 +27,12 @@ function cancel() {
     document.getElementById('home-view').style.display = 'block';
 }
 
-// --- ENVOI DES DONNÉES ---
+// --- LOGIQUE FIREBASE ---
 document.getElementById('apply-form').onsubmit = async (e) => {
     e.preventDefault();
     const btn = document.getElementById('btn-submit');
+    btn.innerText = "TRANSMISSION...";
     btn.disabled = true;
-    btn.innerText = "ENVOI EN COURS...";
 
     const payload = {
         nom: document.getElementById('nom').value,
@@ -44,20 +44,12 @@ document.getElementById('apply-form').onsubmit = async (e) => {
         date: new Date().toLocaleString('fr-FR')
     };
 
-    try {
-        await fetch(DB_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        });
-        alert("Dossier envoyé avec succès !");
-        location.reload();
-    } catch (err) {
-        alert("Erreur lors de l'envoi.");
-        btn.disabled = false;
-    }
+    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(payload) });
+    alert("Dossier envoyé !");
+    location.reload();
 };
 
-// --- ADMINISTRATION ---
+// --- ADMIN ---
 function handleAdmin(res) {
     const user = JSON.parse(atob(res.credential.split('.')[1]));
     if(user.email === ADMIN_MAIL) {
@@ -69,32 +61,30 @@ function handleAdmin(res) {
 }
 
 async function loadAdmin() {
-    const response = await fetch(DB_URL);
-    const data = await response.json();
-    
+    const res = await fetch(DB_URL);
+    const data = await res.json();
     const pending = document.getElementById('list-pending');
     const admission = document.getElementById('list-admission');
-    
-    pending.innerHTML = "";
-    admission.innerHTML = "";
+    pending.innerHTML = ""; admission.innerHTML = "";
 
     if(!data) return;
 
     Object.entries(data).reverse().forEach(([id, c]) => {
         const card = `
             <div class="admin-card">
-                <p><b>${c.role}</b> - ${c.date}</p>
+                <div style="display:flex; justify-content:space-between; color:var(--blue); font-weight:800; font-size:0.8rem">
+                    <span>${c.role}</span><span>${c.date}</span>
+                </div>
                 <h3>${c.nom}</h3>
-                <p>Discord: ${c.discord} | Pôle: ${c.matiere}</p>
-                <div class="motiv-box">${c.motivations}</div>
+                <p>Discord: ${c.discord} | Matière: ${c.matiere}</p>
+                <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; margin:10px 0;">${c.motivations}</div>
                 <div class="btn-zone">
                     ${c.status === 'attente' ? `
-                        <button class="btn-ok" onclick="decider('${id}', 'Accepté')">ACCEPTER</button>
-                        <button class="btn-no" onclick="decider('${id}', 'Refusé')">REFUSER</button>
-                    ` : `<div class="status-tag ${c.status.toLowerCase()}">${c.status}</div>`}
+                        <button onclick="decider('${id}', 'Accepté')" style="background:#10b981; border:none; color:white; padding:10px; border-radius:5px; cursor:pointer; width:48%">ACCEPTER</button>
+                        <button onclick="decider('${id}', 'Refusé')" style="background:#ef4444; border:none; color:white; padding:10px; border-radius:5px; cursor:pointer; width:48%">REFUSER</button>
+                    ` : `<div class="status-tag ${c.status.toLowerCase()}">DOSSIER ${c.status.toUpperCase()}</div>`}
                 </div>
             </div>`;
-        
         if(c.status === 'attente') pending.innerHTML += card;
         else admission.innerHTML += card;
     });
@@ -102,9 +92,6 @@ async function loadAdmin() {
 
 async function decider(id, action) {
     const url = `https://campus-rosa-parks-default-rtdb.europe-west1.firebasedatabase.app/candidatures/${id}.json`;
-    await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: action })
-    });
+    await fetch(url, { method: 'PATCH', body: JSON.stringify({ status: action }) });
     loadAdmin();
 }
