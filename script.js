@@ -28,12 +28,40 @@ function showPopup(title, text, isConfirm = false, onConfirm = null) {
     overlay.style.display = 'flex';
 }
 
-function refreshData() {
-    document.getElementById('loader-overlay').style.display = 'flex';
+// ACTUALISER AVEC CHARGEMENT ET CONFIRMATION
+async function refreshData() {
+    const loader = document.getElementById('loader-overlay');
+    const spinner = loader.querySelector('.spinner');
+    const statusText = loader.querySelector('p');
+    const loaderBox = loader.querySelector('.loader-box');
+
+    // 1. On affiche le loader
+    loader.style.display = 'flex';
+    statusText.innerText = "Synchronisation avec la base de données...";
+    spinner.style.display = "block";
+
+    // 2. On attend 5 secondes (avec le rond qui tourne à 3s/tour)
     setTimeout(async () => {
-        await loadAdmin();
-        document.getElementById('loader-overlay').style.display = 'none';
-    }, 5000); // 5 sec d'attente comme demandé
+        await loadAdmin(); // On recharge les données en arrière-plan
+        
+        // 3. On transforme le loader en message de succès
+        spinner.style.display = "none";
+        statusText.innerHTML = "<i class='fas fa-check-circle' style='color:#34c759; font-size:2rem; margin-bottom:10px; display:block;'></i> Données actualisées avec succès !";
+        
+        // 4. On ajoute le bouton "D'accord" s'il n'existe pas déjà
+        if (!document.getElementById('btn-close-loader')) {
+            const btnOk = document.createElement('button');
+            btnOk.id = "btn-close-loader";
+            btnOk.className = "btn-primary";
+            btnOk.style.marginTop = "20px";
+            btnOk.innerText = "D'accord";
+            btnOk.onclick = () => {
+                loader.style.display = 'none';
+                btnOk.remove(); // On le retire pour la prochaine fois
+            };
+            loaderBox.appendChild(btnOk);
+        }
+    }, 5000); 
 }
 
 function openForm(role) {
