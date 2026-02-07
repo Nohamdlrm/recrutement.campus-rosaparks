@@ -3,292 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recrutement | Rosa Parks</title>
+    <title>Recrutement | Campus Rosa Parks</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <style>
-        :root {
-            --accent: #a855f7;
-            --accent-glow: rgba(168, 85, 247, 0.4);
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-        }
-
-        body {
-            font-family: 'Quicksand', sans-serif;
-            margin: 0;
-            background: var(--bg);
-            color: white;
-            overflow-x: hidden;
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
-        }
-
-        /* Barre de navigation stylée */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
-
-        .header-title {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        /* Cartes de sélection */
-        .selection-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .glass-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        .glass-card h2 { font-size: 2rem; margin-top: 0; }
-
-        /* Formulaire stylé */
-        .form-container {
-            display: none;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--accent);
-            margin-top: 30px;
-            animation: zoomIn 0.5s ease;
-        }
-
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        input, textarea {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1rem;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        input:focus, textarea:focus {
-            border-color: var(--accent);
-            outline: none;
-            background: rgba(0,0,0,0.4);
-        }
-
-        textarea { grid-column: span 2; resize: none; }
-
-        .rules-box {
-            background: rgba(168, 85, 247, 0.1);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .btn-submit {
-            background: linear-gradient(45deg, #a855f7, #ec4899);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover {
-            box-shadow: 0 0 20px #ec4899;
-            transform: scale(1.02);
-        }
-
-        /* Popups */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .popup-box {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 30px;
-            text-align: center;
-            max-width: 450px;
-            border: 2px solid var(--accent);
-        }
-
-        .close-form {
-            float: right;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #94a3b8;
-        }
-
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes zoomIn { from { opacity: 0; scale: 0.95; } to { opacity: 1; scale: 1; } }
-    </style>
 </head>
 <body>
 
 <nav>
     <div class="logo-text">ROSA PARKS RECRUTEMENT</div>
     <div id="login-container">
-        <div id="g_id_onload" data-client_id="AIzaSyCPq5eZUIQZpKZ0mskszEqswYkk1xSHzME" data-callback="checkAdmin"></div>
+        <div id="g_id_onload" 
+             data-client_id="AIzaSyCPq5eZUIQZpKZ0mskszEqswYkk1xSHzME" 
+             data-callback="checkAdmin">
+        </div>
         <div class="g_id_signin" data-type="icon" data-shape="circle"></div>
     </div>
+    <div id="admin-logged" class="admin-badge" style="display:none">Mode Administrateur ✅</div>
 </nav>
 
 <div class="container">
-    <div class="header-title">
-        <h1>Postulez au sein du Campus</h1>
-        <p>Sélectionnez votre voie pour commencer votre dossier.</p>
+    <div id="role-selection">
+        <div class="header-title">
+            <h1>Portail de Recrutement</h1>
+            <span class="instruction">💡 Cliquez sur une carte pour ouvrir le formulaire</span>
+        </div>
+        <div class="selection-grid">
+            <div class="glass-card" onclick="openApp('prof')">
+                <div class="icon">🎓</div>
+                <h2>Professeur</h2>
+                <p>Enseignez au Campus</p>
+            </div>
+            <div class="glass-card" onclick="openApp('aed')">
+                <div class="icon">🛡️</div>
+                <h2>AED</h2>
+                <p>Gérez la vie scolaire</p>
+            </div>
+        </div>
     </div>
 
-    <div class="selection-grid" id="main-grid">
-        <div class="glass-card" onclick="openApplication('prof')">
-            <div style="font-size: 3rem;">🎓</div>
-            <h2>Professeur</h2>
-            <p>Enseignez et gérez vos classes via Pronote.</p>
-        </div>
-        <div class="glass-card" onclick="openApplication('aed')">
-            <div style="font-size: 3rem;">🛡️</div>
-            <h2>AED</h2>
-            <p>Assurez la discipline et le bon fonctionnement.</p>
-        </div>
-    </div>
-
-    <div class="form-container" id="form-view">
-        <span class="close-form" onclick="location.reload()">✕ Annuler</span>
-        <h2 id="form-title">Dossier de candidature</h2>
-        
-        <form id="final-form">
-            <div class="input-group">
-                <input type="text" id="fn-nom" placeholder="Nom & Prénom RP" required>
-                <input type="text" id="fn-discord" placeholder="Pseudo Discord" required>
+    <div id="form-view" class="form-container">
+        <span class="close-form" onclick="goBack()">✕ ANNULER</span>
+        <h2 id="form-title">Dossier</h2>
+        <form id="applyForm">
+            <input type="hidden" id="role-val">
+            <div class="input-row">
+                <input type="text" id="nom" placeholder="Prénom & Nom RP" required>
+                <input type="text" id="discord" placeholder="Pseudo Discord" required>
             </div>
-            <div class="input-group">
-                <input type="text" id="fn-matiere" placeholder="Spécialité / Matière" required>
-                <div style="display:flex; align-items:center; color: #94a3b8; font-size: 0.8rem;">*Tous les champs sont obligatoires</div>
-            </div>
+            <input type="text" id="matiere" placeholder="Matière souhaitée ou Pôle de surveillance" required>
+            <textarea id="motiv" rows="6" placeholder="Quelles sont vos motivations ?" required></textarea>
             
-            <textarea id="fn-motiv" rows="6" placeholder="Quelles sont vos motivations pour rejoindre l'équipe ?" required></textarea>
-
             <div class="rules-box">
-                <div style="margin-bottom:15px; display:flex; gap:10px;">
-                    <input type="checkbox" required style="width:20px; height:20px;">
+                <div class="check-item">
+                    <input type="checkbox" required>
                     <label>Je m'engage à être actif et à ne pas harceler le staff pour une réponse.</label>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <input type="checkbox" required style="width:20px; height:20px;">
-                    <label id="fn-engagement-text"></label>
+                <div class="check-item">
+                    <input type="checkbox" required>
+                    <label id="eng-text"></label>
                 </div>
             </div>
-
-            <button type="submit" class="btn-submit">VALIDER MON DOSSIER</button>
+            <button type="submit" class="btn-submit">VALIDER LE DOSSIER</button>
         </form>
+    </div>
+
+    <div id="admin-view" class="admin-section">
+        <div class="admin-header">
+            <h2>Dossiers Reçus</h2>
+            <button class="btn-refresh" onclick="fetchCandidates()">Actualiser la liste</button>
+        </div>
+        <div id="candidates-list">Chargement des dossiers en temps réel...</div>
     </div>
 </div>
 
 <div class="popup-overlay" id="pop-success">
     <div class="popup-box">
-        <div style="font-size: 50px; margin-bottom: 20px;">🚀</div>
-        <h2 style="color: #10b981;">DOSSIER VALIDÉ</h2>
-        <p>Votre candidature a été transmise avec succès à l'administration du Campus Rosa Parks.</p>
-        <p style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">Réponse attendue sous : <b>24 HEURES</b></p>
+        <div class="check-icon">✓</div>
+        <h2>DOSSIER TRANSMIS</h2>
+        <p>Votre candidature a été enregistrée avec succès.</p>
+        <div class="timer-box">RÉPONSE SOUS 24H</div>
         <button class="btn-submit" onclick="location.reload()">RETOUR À L'ACCUEIL</button>
     </div>
 </div>
 
-<div class="popup-overlay" id="pop-error">
-    <div class="popup-box" style="border-color: #ef4444;">
-        <h2 style="color: #ef4444;">ACCÈS REFUSÉ</h2>
-        <p>Désolé, seul l'administrateur peut accéder à cette zone.</p>
-        <p style="font-size: 0.8rem; opacity: 0.7;">Contactez le support si c'est une erreur.</p>
-        <button class="btn-submit" onclick="location.reload()">FERMER</button>
-    </div>
-</div>
-
-<script>
-    function checkAdmin(response) {
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        if(payload.email === "ce.0227235a@campus-rosaparks.fr") {
-            alert("Bonjour Administrateur ! Système de gestion en cours de chargement...");
-            // Ici tu peux ajouter la logique pour afficher les dossiers reçus
-        } else {
-            document.getElementById('pop-error').style.display = 'flex';
-        }
-    }
-
-    function openApplication(role) {
-        document.getElementById('main-grid').style.display = 'none';
-        document.getElementById('form-view').style.display = 'block';
-        document.getElementById('form-title').innerText = "Candidature au poste de " + role.toUpperCase();
-        
-        const engText = (role === 'prof') 
-            ? "Je confirme que je validerai Pronote chaque jour avant 21h et que je ne quitterai pas mes fonctions sans prévenir." 
-            : "Je confirme ma présence lors des surveillances et mon respect total de la hiérarchie du campus.";
-        
-        document.getElementById('fn-engagement-text').innerText = engText;
-    }
-
-    document.getElementById('final-form').onsubmit = function(e) {
-        e.preventDefault();
-        // Simulation d'envoi
-        document.getElementById('pop-success').style.display = 'flex';
-    }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
