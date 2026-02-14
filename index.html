@@ -3,92 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Rosa Parks | Portail Officiel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>Recrutement | Maintenance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS INTÉGRÉ --- */
+        :root {
+            --bg: #0d0d0f;
+            --card: #16161a;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-grey: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Grille Bento Calibrée */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 16px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Case Principale (Titre) */
+        .box-title {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #1c1c22 0%, #111115 100%);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+        }
+
+        h1 span {
+            opacity: 0.4;
+        }
+
+        /* Case Statut */
+        .box-status {
+            grid-column: span 1;
+            align-items: center;
+            text-align: center;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Case Message */
+        .box-msg {
+            grid-column: span 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-grey);
+            font-weight: 500;
+        }
+
+        .box-msg b {
+            color: #fff;
+        }
+
+        /* Case Signature */
+        .box-footer {
+            grid-column: span 2;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dir-label {
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .dir-sub {
+            font-size: 0.8rem;
+            color: var(--text-grey);
+            display: block;
+            font-weight: 400;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .tag {
+            background: #fff;
+            color: #000;
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+            .box-title, .box-status, .box-msg, .box-footer { grid-column: span 1; }
+            .box-footer { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
 </head>
-<body class="light-mode">
+<body>
 
-<nav class="navbar">
-    <div class="nav-content">
-        <div class="logo">CAMPUS <span>ROSA PARKS</span></div>
-        <div class="nav-right">
-            <button id="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
-            <div id="login-zone">
-                <div id="g_id_onload" data-client_id="229948163418-m3n25i32ej423k59qu0gs8irp9g4vklp.apps.googleusercontent.com" data-callback="handleAdmin"></div>
-                <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div id="overlay" class="overlay" style="display:none">
-    <div id="popup-box" class="popup-box">
-        </div>
-</div>
-
-<main class="container">
-    <div id="home-view">
-        <div class="hero-grid">
-            <section class="info-card">
-                <h1>Qui sommes-nous ?</h1>
-                <p>Le <strong>Campus Rosa Parks</strong> est une institution d'élite prônant la rigueur et l'excellence scolaire à travers une immersion totale.</p>
-            </section>
-            <section class="info-card">
-                <h1>Pourquoi postuler ?</h1>
-                <p>Nous recherchons des profils sérieux pour garantir une expérience de haute qualité. Rejoignez une équipe structurée.</p>
-            </section>
+    <div class="grid-layout">
+        <div class="box box-title">
+            <h1>Recrutement<br><span>Suspendu.</span></h1>
         </div>
 
-        <div class="role-grid">
-            <div class="role-card" onclick="openForm('Professeur')">
-                <i class="fas fa-graduation-cap"></i>
-                <h3>Professeur</h3>
-                <span class="btn-fake">Postuler</span>
+        <div class="box box-status">
+            <div class="pulse-dot"></div>
+            <p style="font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;">MAINTENANCE</p>
+        </div>
+
+        <div class="box box-msg">
+            Nous avons lancé de nombreux services. Nous attendons <b>l'accord du principal</b> pour publier le site.
+        </div>
+
+        <div class="box box-footer">
+            <div class="dir-label">
+                La Direction
+                <span class="dir-sub">Bien cordialement</span>
             </div>
-            <div class="role-card" onclick="openForm('AED')">
-                <i class="fas fa-user-shield"></i>
-                <h3>AED</h3>
-                <span class="btn-fake">Postuler</span>
-            </div>
+            <div class="tag">EN ATTENTE</div>
         </div>
     </div>
 
-    <section id="form-view" style="display:none">
-        <div class="form-card">
-            <button class="btn-back" onclick="cancel()"><i class="fas fa-chevron-left"></i> Retour</button>
-            <h2>Candidature</h2>
-            <form id="apply-form">
-                <input type="hidden" id="input-role">
-                <div class="form-row">
-                    <input type="text" id="nom" placeholder="Prénom & Nom RP" required>
-                    <input type="text" id="discord" placeholder="Identifiant Discord" required>
-                </div>
-                <input type="text" id="matiere" placeholder="Poste souhaité" required>
-                <textarea id="motivs" rows="5" placeholder="Vos motivations..." required></textarea>
-                <button type="submit" class="btn-main">Déposer le dossier</button>
-            </form>
-        </div>
-    </section>
-
-    <section id="admin-view" style="display:none">
-    <div class="admin-header">
-        <h2>Panel Direction</h2>
-        </div>
-    <div class="admin-grid">
-        <div class="admin-col">
-            <h3 class="tag">EN ATTENTE</h3>
-            <div id="list-pending"></div>
-        </div>
-        <div class="admin-col">
-            <h3 class="tag">ARCHIVES</h3>
-            <div id="list-admission"></div>
-        </div>
-    </div>
-</section>
-
-<script src="script.js"></script>
 </body>
 </html>
